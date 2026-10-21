@@ -1,0 +1,113 @@
+export const lessons = [
+  {
+    id: 't1-markup',
+    title: '1. Markup',
+    intro: 'Plain text is typed as-is. = starts a heading, *bold*, _italic_, `code`.',
+    tasks: [
+      { source: 'Hello world', hint: 'no modes needed' },
+      { source: '= Heading', hint: '= at the start of a line is a level-1 heading' },
+      { source: 'Hello, world!', hint: 'plain text' },
+      { source: '*bold* and _italic_', hint: 'markers come in pairs' },
+      { source: 'Code: `typst`', hint: 'backticks for inline code' },
+    ],
+  },
+  {
+    id: 't2-math',
+    title: '2. Math $ ... $',
+    intro: 'Dollar signs wrap formulas, like LaTeX — but commands have NO backslash, they are plain words.',
+    tasks: [
+      { source: '$x$', hint: 'two dollars around the symbol' },
+      { source: '$a + b$', hint: 'spaces around +' },
+      { source: '$2 + 2 = 4$', hint: 'digits and operators' },
+      { source: 'Speed $v$ depends on $t$.', hint: 'text and math mix' },
+    ],
+  },
+  {
+    id: 't3-scripts',
+    title: '3. Superscripts and subscripts',
+    intro: '^ is a superscript, _ is a subscript. Group with (...), NOT with braces like in LaTeX.',
+    tasks: [
+      { source: '$a^2$', hint: 'same as LaTeX' },
+      { source: '$x_1$', hint: 'subscript via _' },
+      { source: '$x_1^2$', hint: 'they combine' },
+      { source: '$e^(i pi) + 1 = 0$', hint: 'multi-char groups use (i pi)' },
+      { source: '$a^(10)$', hint: 'parens (10), not {10}' },
+    ],
+  },
+  {
+    id: 't4-frac',
+    title: '4. Fractions / and frac',
+    intro: 'a/b already builds a fraction. Explicit form: frac(numerator, denominator) — a function call.',
+    tasks: [
+      { source: '$a/b$', hint: 'a plain slash' },
+      { source: '$frac(a, b)$', hint: 'arguments separated by commas' },
+      { source: '$1/2 + 1/3$', hint: 'two fractions' },
+      { source: '$frac(x^2, sqrt(2))$', hint: 'nesting via commas' },
+    ],
+  },
+  {
+    id: 't5-roots',
+    title: '5. Roots sqrt',
+    intro: 'sqrt(x) is the square root, root(n, x) is the nth root.',
+    tasks: [
+      { source: '$sqrt(2)$', hint: 'one argument' },
+      { source: '$sqrt(x + 1)$', hint: 'the argument can be an expression' },
+      { source: '$root(3, 8)$', hint: 'the degree is the first argument' },
+    ],
+  },
+  {
+    id: 't6-greek',
+    title: '6. Greek letters',
+    intro: 'Just write the name: alpha, beta, pi, theta, Delta. Capital letters start with a capital.',
+    tasks: [
+      { source: '$alpha + beta$', hint: 'no backslashes' },
+      { source: '$pi approx 3.14159$', hint: 'approx means approximately' },
+      { source: '$theta = 30 degree$', hint: 'degree is the degree sign' },
+      { source: '$Delta x = 0$', hint: 'capital Delta is a change' },
+    ],
+  },
+  {
+    id: 't7-bigops',
+    title: '7. Sums, integrals, limits',
+    intro: 'sum, integral, lim. Bounds via _() and ^. The arrow is ->.',
+    tasks: [
+      { source: '$sum_(i=1)^n i$', hint: 'bounds in parens after _' },
+      { source: '$integral_0^1 x dif x$', hint: 'dif is the upright d' },
+      { source: '$lim_(x -> 0) (sin x)/x$', hint: 'limit: lim_(x -> 0)' },
+      { source: '$sum_(k=0)^infinity 1/k!$', hint: 'infinity is infinity' },
+    ],
+  },
+  {
+    id: 't8-brackets',
+    title: '8. Brackets lr and functions',
+    intro: 'lr(...) stretches brackets to the content. abs(x) is absolute value — no \\left needed.',
+    tasks: [
+      { source: '$lr((a/b))$', hint: 'lr plus bracket pairs' },
+      { source: '$lr([0, 1])$', hint: 'square brackets too' },
+      { source: '$lr(|x|)$', hint: 'vertical bars' },
+      { source: '$abs(x + 1)$', hint: 'a ready-made abs function' },
+    ],
+  },
+  {
+    id: 't9-matrix',
+    title: '9. Matrices mat',
+    intro: 'mat(elements separated by commas; rows separated by semicolons).',
+    tasks: [
+      { source: '$mat(1, 2; 3, 4)$', hint: '; separates rows' },
+      { source: '$mat(a, b; c, d)$', hint: 'letters instead of digits' },
+      { source: '$mat(x_11, x_12; x_21, x_22)$', hint: 'subscripts inside the matrix' },
+    ],
+  },
+  {
+    id: 't10-doc',
+    title: '10. Document structure',
+    intro: 'Lists start with - and +. Functions are called with #: emph(...), rect(...), text(...).',
+    tasks: [
+      { source: '- one', hint: 'a hyphen starts an itemized list' },
+      { source: '+ one', hint: 'a plus starts an enumerated list' },
+      { source: '#emph[important]', hint: 'function with a bracketed argument' },
+      { source: '#rect(width: 3cm, height: 1cm)', hint: 'parameters as name: value' },
+      { source: '#text(fill: red)[red text]', hint: 'fill sets the color' },
+    ],
+  },
+];

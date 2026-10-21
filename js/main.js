@@ -47,7 +47,6 @@ const els = {
   previewBlock: $('preview-block'),
   typedSrc: $('typed-src'),
   typedPreview: $('typed-preview'),
-  strictError: $('strict-error'),
   learnList: $('learn-list'),
 };
 
@@ -58,8 +57,6 @@ const state = {
   learnTab: 0,
   taskIdx: 0,
   startedAt: null,
-  okKeys: 0,
-  totalKeys: 0,
   done: false,
   previewShown: false,
 };
@@ -82,11 +79,27 @@ function loadProgress() {
 let progress = loadProgress();
 
 function saveProgress() {
-  localStorage.setItem(PROGRESS_KEY, JSON.stringify([...progress]));
+  try {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify([...progress]));
+  } catch {
+    /* storage unavailable */
+  }
 }
 
 function taskKey(lesson, i) {
   return `${state.lang}:${lesson.id}:${i}`;
+}
+
+function resumePosition(lang) {
+  const lessons = LANGS[lang].lessons;
+  state.lessonIdx = 0;
+  state.taskIdx = 0;
+  const li = lessons.findIndex((l) =>
+    l.tasks.some((_, ti) => !progress.has(`${lang}:${l.id}:${ti}`)),
+  );
+  if (li === -1) return;
+  state.lessonIdx = li;
+  state.taskIdx = lessons[li].tasks.findIndex((_, ti) => !progress.has(`${lang}:${lessons[li].id}:${ti}`));
 }
 
 function lessonDoneCount(lesson) {
@@ -195,8 +208,6 @@ function loadTask() {
   const lang = currentLang();
 
   state.startedAt = null;
-  state.okKeys = 0;
-  state.totalKeys = 0;
   state.done = false;
   state.previewShown = false;
 
@@ -204,11 +215,9 @@ function loadTask() {
   els.hintBox.textContent = '';
   els.doneRow.hidden = true;
   els.previewBlock.hidden = true;
-  els.nextBtn.hidden = false;
   els.input.value = '';
   els.input.readOnly = false;
   els.input.dataset.len = '0';
-  els.strictError.textContent = '';
   els.typedSrc.textContent = '';
 
   renderMirror();
@@ -237,13 +246,6 @@ function onInput(e) {
     state.startedAt = Date.now();
     revealPreviewBlock();
   }
-  const prevLen = Number(e.target.dataset.len || 0);
-  if (v.length > prevLen) {
-    for (let i = prevLen; i < v.length; i++) {
-      state.totalKeys++;
-      if (v[i] === target[i]) state.okKeys++;
-    }
-  }
   els.input.dataset.len = String(v.length);
 
   renderMirror();
@@ -265,7 +267,6 @@ function completeTask() {
   els.doneMsg.textContent = 'done';
   els.doneStats.textContent = `${(elapsed / 1000).toFixed(1)}s · ${w} wpm`;
   els.doneRow.hidden = false;
-  els.strictError.textContent = '';
 
   clearTimeout(typedTimer);
   runTypedPreview();
@@ -304,19 +305,8 @@ function switchLang(lang) {
     b.classList.toggle('active', b.dataset.lang === lang);
   });
 
-  const lessons = LANGS[lang].lessons;
-  state.lessonIdx = 0;
-  state.taskIdx = 0;
-  const unfinishedLesson = lessons.findIndex((l) =>
-    l.tasks.some((_, ti) => progress.has(`${lang}:${l.id}:${ti}`)),
-  );
-  if (unfinishedLesson !== -1) {
-    state.lessonIdx = unfinishedLesson;
-    const lesson = lessons[unfinishedLesson];
-    state.taskIdx = lesson.tasks.findIndex((_, ti) => !progress.has(`${lang}:${lesson.id}:${ti}`));
-  }
   localStorage.setItem(STATE_KEY, lang);
-
+  resumePosition(lang);
   state.learnTab = state.lessonIdx;
   if (state.view === 'learn') buildLearn();
   else loadTask();
@@ -482,7 +472,7 @@ els.input.addEventListener('keydown', (e) => {
 els.nextBtn.addEventListener('click', nextTask);
 
 document.addEventListener('keydown', (e) => {
-  if (e.target === els.input) return;
+  if (['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(e.target.tagName)) return;
   if (e.key === 'Escape' && state.view === 'practice') loadTask();
   if (e.key === 'Enter' && state.view === 'practice' && state.done) nextTask();
   if (state.view !== 'practice') return;
@@ -524,6 +514,9 @@ try {
     });
   }
 } catch {
-  }
+  /* ignore */
+}
+resumePosition(state.lang);
+state.learnTab = state.lessonIdx;
 
 loadTask();

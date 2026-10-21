@@ -27,6 +27,7 @@ const $ = (id) => document.getElementById(id);
 const els = {
   modeSwitch: $('mode-switch'),
   langSwitch: $('lang-switch'),
+  themeBtn: $('theme-btn'),
   viewPractice: $('view-practice'),
   viewLearn: $('view-learn'),
   lessonSelect: $('lesson-select'),
@@ -503,6 +504,33 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && state.view === 'practice') loadTask();
   if (e.key === 'Enter' && state.view === 'practice' && state.done) nextTask();
 });
+
+/* ---------- theme ---------- */
+
+const THEME_KEY = 'type-tex-theme-v1';
+
+function effectiveTheme() {
+  const t = document.documentElement.dataset.theme;
+  if (t === 'dark' || t === 'light') return t;
+  return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function syncThemeBtn() {
+  els.themeBtn.textContent = effectiveTheme() === 'dark' ? 'light' : 'dark';
+}
+
+els.themeBtn.addEventListener('click', () => {
+  const next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem(THEME_KEY, next);
+  syncThemeBtn();
+});
+
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (!document.documentElement.dataset.theme) syncThemeBtn();
+});
+
+syncThemeBtn();
 
 /* ---------- init ---------- */
 

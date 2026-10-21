@@ -7,6 +7,12 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
   <link rel="stylesheet" href="css/styles.css">
+  <script>
+    try {
+      var t = localStorage.getItem('type-tex-theme-v1');
+      if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 </head>
 <body>
 
@@ -18,9 +24,12 @@
     <button class="nav-link" data-view="learn">learn</button>
   </nav>
 
-  <div id="lang-switch">
-    <button class="lang-btn active" data-lang="latex">latex</button>
-    <button class="lang-btn" data-lang="typst">typst</button>
+  <div class="header-right">
+    <div id="lang-switch">
+      <button class="lang-btn active" data-lang="latex">latex</button>
+      <button class="lang-btn" data-lang="typst">typst</button>
+    </div>
+    <button id="theme-btn" title="toggle theme">dark</button>
   </div>
 </header>
 

@@ -49,7 +49,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: Georgia, "Times New Roman", Times, serif;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   font-size: 15px;
   line-height: 1.55;
   color: var(--ink);
@@ -59,11 +59,6 @@ body {
 button, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; background: none; border: none; }
 a { color: inherit; text-decoration: none; }
-
-code, pre, .mirror, #input, .progress, .task-pos, .done-stats,
-.strict-error, .tab-done, .stage-footer, .learn-tabs .ex-no {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-}
 
 header {
   display: flex;
@@ -87,7 +82,6 @@ header {
 #mode-switch { display: flex; gap: 26px; }
 
 .nav-link {
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: .14em;
@@ -103,7 +97,6 @@ header {
 #lang-switch { display: flex; }
 
 .lang-btn {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 12px;
   color: var(--muted);
   padding: 5px 13px;
@@ -115,7 +108,6 @@ header {
 .lang-btn.active { background: var(--ink); color: var(--bg); }
 
 #theme-btn {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 12px;
   color: var(--muted);
   border: 1px solid var(--line-strong);
@@ -248,7 +240,6 @@ select {
 .done-row .btn { margin-left: auto; }
 
 .btn {
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: .12em;
@@ -297,7 +288,6 @@ select {
 }
 
 .learn-head {
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: .14em;
@@ -316,7 +306,6 @@ select {
   display: flex;
   align-items: baseline;
   gap: 7px;
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: .1em;
@@ -363,7 +352,6 @@ select {
 }
 
 .link-btn {
-  font-family: Helvetica, Arial, sans-serif;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: .12em;

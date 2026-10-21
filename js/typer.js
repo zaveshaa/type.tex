@@ -10,3 +10,8 @@ export function firstMismatch(input, target) {
   if (input.length < target.length) return input.length;
   return -1;
 }
+
+export function wpm(correctChars, elapsedMs) {
+  if (elapsedMs < 500) return 0;
+  return Math.round((correctChars / 5) / (elapsedMs / 60000));
+}

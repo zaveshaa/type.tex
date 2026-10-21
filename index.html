@@ -35,16 +35,17 @@
 
 <main>
 
-  <!-- ================= PRACTICE ================= -->
   <section id="view-practice">
     <div class="stage">
 
       <div class="task-line">
-        <div class="task-selects">
-          <select id="lesson-select" aria-label="Lesson"></select>
-          <select id="task-select" aria-label="Task"></select>
+        <select id="lesson-select" aria-label="Lesson"></select>
+        <div class="task-nav">
+          <span id="progress-badge" class="progress"></span>
+          <button id="task-prev" aria-label="Previous task">‹</button>
+          <span id="task-pos" class="task-pos">1 / 1</span>
+          <button id="task-next" aria-label="Next task">›</button>
         </div>
-        <span id="progress-badge" class="progress"></span>
       </div>
 
       <div id="goal-preview" class="stage-render fade"></div>
@@ -76,12 +77,11 @@
         <div id="strict-error" class="strict-error"></div>
       </div>
 
-      <div class="stage-footer">tab hint · esc restart · enter next</div>
+      <div class="stage-footer">← → task · tab hint · esc restart · enter next</div>
 
     </div>
   </section>
 
-  <!-- ================= LEARN ================= -->
   <section id="view-learn" hidden>
     <div id="learn-list"></div>
   </section>

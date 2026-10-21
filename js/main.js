@@ -31,7 +31,9 @@ const els = {
   viewPractice: $('view-practice'),
   viewLearn: $('view-learn'),
   lessonSelect: $('lesson-select'),
-  taskSelect: $('task-select'),
+  taskPrev: $('task-prev'),
+  taskNext: $('task-next'),
+  taskPos: $('task-pos'),
   progressBadge: $('progress-badge'),
   goalPreview: $('goal-preview'),
   typebox: $('typebox'),
@@ -66,8 +68,6 @@ const currentLang = () => LANGS[state.lang];
 const currentLesson = () => currentLang().lessons[state.lessonIdx];
 const currentTask = () => currentLesson().tasks[state.taskIdx];
 
-/* ---------- progress ---------- */
-
 function loadProgress() {
   try {
     const raw = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '[]');
@@ -97,8 +97,6 @@ function lessonDoneCount(lesson) {
   return n;
 }
 
-/* ---------- rendering helpers ---------- */
-
 function fadeRender(el, src) {
   el.classList.remove('in');
   Promise.resolve(currentLang().render(el, src)).then(() => {
@@ -124,8 +122,6 @@ function observePreviews(root) {
   root.querySelectorAll('[data-src]').forEach((el) => previewObserver.observe(el));
 }
 
-/* ---------- selects ---------- */
-
 function populateSelects() {
   const lessons = currentLang().lessons;
   els.lessonSelect.innerHTML = '';
@@ -137,19 +133,13 @@ function populateSelects() {
   });
   els.lessonSelect.value = String(state.lessonIdx);
 
-  els.taskSelect.innerHTML = '';
-  currentLesson().tasks.forEach((_, i) => {
-    const opt = document.createElement('option');
-    opt.value = String(i);
-    opt.textContent = `task ${i + 1}${progress.has(taskKey(currentLesson(), i)) ? ' ·' : ''}`;
-    els.taskSelect.appendChild(opt);
-  });
-  els.taskSelect.value = String(state.taskIdx);
-
-  els.progressBadge.textContent = `${lessonDoneCount(currentLesson())} / ${currentLesson().tasks.length}`;
+  const lesson = currentLesson();
+  els.taskPos.textContent = `${state.taskIdx + 1} / ${lesson.tasks.length}`;
+  els.taskPrev.disabled = state.taskIdx === 0;
+  els.taskNext.disabled = state.taskIdx === lesson.tasks.length - 1;
+  const done = lessonDoneCount(lesson);
+  els.progressBadge.textContent = done > 0 ? `${done} done` : '';
 }
-
-/* ---------- input mirror ---------- */
 
 function renderMirror() {
   const target = currentTask().source;
@@ -170,8 +160,6 @@ function renderMirror() {
   els.typed.appendChild(frag);
   els.typed.scrollLeft = els.input.scrollLeft;
 }
-
-/* ---------- typed preview ---------- */
 
 let typedTimer = null;
 
@@ -200,8 +188,6 @@ function revealPreviewBlock() {
   els.typedPreview.innerHTML = '<span class="preview-idle">…</span>';
   requestAnimationFrame(() => els.typedPreview.classList.add('in'));
 }
-
-/* ---------- task lifecycle ---------- */
 
 function loadTask() {
   const lesson = currentLesson();
@@ -311,8 +297,6 @@ function nextTask() {
   loadTask();
 }
 
-/* ---------- language / view switching ---------- */
-
 function switchLang(lang) {
   if (lang === state.lang || !LANGS[lang]) return;
   state.lang = lang;
@@ -348,8 +332,6 @@ function switchView(view) {
   if (view === 'learn') buildLearn();
   else els.input.focus();
 }
-
-/* ---------- learn view ---------- */
 
 function buildLearn() {
   const lang = currentLang();
@@ -452,8 +434,6 @@ function buildLearn() {
   observePreviews(els.learnList);
 }
 
-/* ---------- events ---------- */
-
 els.langSwitch.addEventListener('click', (e) => {
   const btn = e.target.closest('.lang-btn');
   if (btn) switchLang(btn.dataset.lang);
@@ -472,9 +452,11 @@ els.lessonSelect.addEventListener('change', () => {
   loadTask();
 });
 
-els.taskSelect.addEventListener('change', () => {
-  state.taskIdx = Number(els.taskSelect.value);
-  loadTask();
+els.taskPrev.addEventListener('click', () => {
+  if (state.taskIdx > 0) { state.taskIdx--; loadTask(); }
+});
+els.taskNext.addEventListener('click', () => {
+  if (state.taskIdx < currentLesson().tasks.length - 1) { state.taskIdx++; loadTask(); }
 });
 
 els.input.addEventListener('input', onInput);
@@ -503,9 +485,10 @@ document.addEventListener('keydown', (e) => {
   if (e.target === els.input) return;
   if (e.key === 'Escape' && state.view === 'practice') loadTask();
   if (e.key === 'Enter' && state.view === 'practice' && state.done) nextTask();
+  if (state.view !== 'practice') return;
+  if (e.key === 'ArrowLeft' && state.taskIdx > 0) { state.taskIdx--; loadTask(); }
+  if (e.key === 'ArrowRight' && state.taskIdx < currentLesson().tasks.length - 1) { state.taskIdx++; loadTask(); }
 });
-
-/* ---------- theme ---------- */
 
 const THEME_KEY = 'type-tex-theme-v1';
 
@@ -532,8 +515,6 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
 
 syncThemeBtn();
 
-/* ---------- init ---------- */
-
 try {
   const saved = localStorage.getItem(STATE_KEY);
   if (saved && LANGS[saved]) {
@@ -543,7 +524,6 @@ try {
     });
   }
 } catch {
-  /* ignore */
-}
+  }
 
 loadTask();

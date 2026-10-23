@@ -110,4 +110,19 @@ export const lessons = [
       { source: '#text(fill: red)[red text]', hint: 'fill sets the color' },
     ],
   },
+  {
+    id: 't11-circuits',
+    title: '11. Physics: circuits',
+    intro: 'Circuit laws as formulas: Ohm, series and parallel, power, impedance, Kirchhoff.',
+    tasks: [
+      { source: '$I = U/R$', hint: 'Ohm\'s law: current = voltage / resistance' },
+      { source: '$U = I R$', hint: 'the same law, solved for voltage' },
+      { source: '$R = R_1 + R_2$', hint: 'series: resistances add' },
+      { source: '$1/R = 1/R_1 + 1/R_2$', hint: 'parallel: reciprocals add' },
+      { source: '$P = U I = I^2 R$', hint: 'power in two forms' },
+      { source: '$Z = sqrt(R^2 + (omega L - 1/(omega C))^2)$', hint: 'impedance of an RLC circuit' },
+      { source: '$sum_k I_k = 0$', hint: 'Kirchhoff current law' },
+      { source: '$sum_k U_k = 0$', hint: 'Kirchhoff voltage law' },
+    ],
+  },
 ];

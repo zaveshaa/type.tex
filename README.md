@@ -19,12 +19,13 @@ A Monkeytype-style trainer for markup languages. You see a typeset example — y
 
 Two languages, 10 lessons each:
 
-| LaTeX (40 tasks) | Typst (41 tasks) |
+| LaTeX | Typst |
 | --- | --- |
 | `$...$` math mode | `$...$` math mode |
 | `^` `_` scripts, `\frac`, `\sqrt` | `^` `_` with `(…)` groups, `frac`, `sqrt` |
 | `\alpha \pi \theta`, `\sum \int \lim` | `alpha pi theta`, `sum integral lim` |
 | `\left( \right)`, `pmatrix`, `\text` | `lr`, `mat`, `#functions[]` |
+| circuits: `\frac`, `\sqrt`, `\omega` | circuits: `frac`, `sqrt`, `omega` |
 
 - LaTeX renders via **KaTeX** with `strict: "error"` — unsupported commands fail loudly, never silently
 - Typst renders via **typst.ts** (WASM in the browser, wrapped in an auto-page so the SVG fits the content)

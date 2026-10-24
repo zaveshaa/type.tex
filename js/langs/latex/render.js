@@ -18,14 +18,6 @@ export function render(el, src) {
 
 export function renderMath(el, src) {
   el.innerHTML = '';
-  if (!window.katex) {
-    const s = document.createElement('span');
-    s.className = 'preview-off';
-    s.textContent = 'KaTeX failed to load (offline?)';
-    el.appendChild(s);
-    return 'katex-missing';
-  }
-
   const trimmed = src.trim();
   if (trimmed === '') {
     const s = document.createElement('span');
@@ -33,6 +25,20 @@ export function renderMath(el, src) {
     s.textContent = 'empty';
     el.appendChild(s);
     return null;
+  }
+
+  if (/\\begin\{tikzpicture\}/.test(src)) {
+    const libs = 'circuits.ee.IEC,arrows.meta';
+    el.innerHTML = `<div class="tikzjax-container"><script type="text/tikz" data-tikz-libraries="${libs}">${src.replace(/<\/script>/gi, '<\\/script>')}</script></div>`;
+    return null;
+  }
+
+  if (!window.katex) {
+    const s = document.createElement('span');
+    s.className = 'preview-off';
+    s.textContent = 'KaTeX failed to load (offline?)';
+    el.appendChild(s);
+    return 'katex-missing';
   }
 
   const hasDelims = /\$/.test(src);
